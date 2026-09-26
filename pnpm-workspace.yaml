@@ -1,0 +1,9 @@
+packages:
+  - core
+  - nui
+  - panel
+  - shared
+
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
