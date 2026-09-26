@@ -411,28 +411,6 @@ export default class FxMonitor {
             }
         }
 
-        //Check if either HB or HC are FATAL, restart the server
-        if (heartBeat.state === MonitorState.FATAL || healthCheck.state === MonitorState.FATAL) {
-            let cause: MonitorRestartCauses;
-            if (heartBeat.state === MonitorState.FATAL && healthCheck.state === MonitorState.FATAL) {
-                cause = 'both';
-            } else if (heartBeat.state === MonitorState.FATAL) {
-                cause = 'heartBeat';
-            } else if (healthCheck.state === MonitorState.FATAL) {
-                cause = 'healthCheck';
-            } else {
-                throw new Error(`Unexpected fatal state: HB:${heartBeat.state} HC:${healthCheck.state}`);
-            }
-
-            return {
-                action: 'RESTART',
-                cause,
-                times: timeTags.simple,
-                reason: 'Server is not responding',
-                issues: [heartBeatIssue, healthCheckIssue],
-            }
-        }
-
         //If http-only hang, warn 1 minute before restart
         if (
             heartBeat.state === MonitorState.HEALTHY
